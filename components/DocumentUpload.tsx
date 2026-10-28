@@ -60,7 +60,7 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
             fileSize: file.size,
           });
         } else {
-          setProcessingStatus(`Successfully parsed ${result.pageCount} page(s) (~${result.text.split(/\s+/).length} words).`);
+          setProcessingStatus(`Extracted ${result.pageCount} page(s) (~${result.text.split(/\s+/).length} words).`);
           onDocumentProcessed({
             fileName: file.name,
             fileType: file.type,
@@ -71,9 +71,9 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
             onTextAppendedToForm(result.text);
           }
         }
-      } catch (err: unknown) {
+      } catch {
         setIsProcessing(false);
-        setErrorMsg('Failed to read PDF text. Please copy and paste the offer text directly into the text field.');
+        setErrorMsg('Failed to parse PDF text. Please copy and paste the offer text into the text area below.');
         onDocumentProcessed({
           fileName: file.name,
           fileType: file.type,
@@ -86,7 +86,7 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
       setIsProcessing(false);
       setProcessingStatus(null);
       setOcrNotice(
-        'Image / Screenshot Uploaded: Client-side OCR is not active in this lightweight tier to prevent external AI data transmission. Please paste the offer text from your screenshot into the "Pasted Offer Text" box below for comprehensive analysis.'
+        'Image Screenshot Uploaded: Client-side OCR is unavailable in this lightweight tier to protect data privacy. Please review the image and copy/paste key offer terms into the text box below for analysis.'
       );
       onDocumentProcessed({
         fileName: file.name,
@@ -128,12 +128,12 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <div className="flex items-center justify-between">
-        <label className="block text-sm font-semibold text-navy-900">
+        <label className="block text-xs font-medium text-charcoal">
           Upload Offer Letter or Email Screenshot (Optional)
         </label>
-        <span className="text-xs text-navy-500">PDF, PNG, JPG (Max 5MB)</span>
+        <span className="text-[11px] text-muted">PDF, PNG, JPG (Max 5MB)</span>
       </div>
 
       {!selectedFile ? (
@@ -143,10 +143,10 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
           onDragOver={handleDrag}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-150 ${
+          className={`border border-dashed rounded p-5 text-center cursor-pointer transition ${
             dragActive
-              ? 'border-teal-500 bg-teal-50/60'
-              : 'border-navy-300 hover:border-navy-400 bg-navy-50/40 hover:bg-navy-50/70'
+              ? 'border-forest bg-sage/50'
+              : 'border-neutral-border hover:border-muted bg-warm hover:bg-neutral-subtle'
           }`}
         >
           <input
@@ -161,36 +161,32 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
             className="hidden"
           />
 
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="w-12 h-12 rounded-full bg-navy-100 flex items-center justify-center text-navy-700">
-              <UploadCloud className="w-6 h-6 text-navy-600" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-navy-900">
-                Click to browse or drag & drop document
-              </p>
-              <p className="text-xs text-navy-500 mt-0.5">
-                PDF text extracted safely in browser. No files stored or sent to external AI.
-              </p>
-            </div>
+          <div className="flex flex-col items-center justify-center space-y-1.5">
+            <UploadCloud className="w-5 h-5 text-muted" />
+            <p className="text-xs font-medium text-charcoal">
+              Click to browse or drag and drop document
+            </p>
+            <p className="text-[11px] text-muted">
+              PDF text parsed locally in browser memory. No files stored or transmitted to external AI services.
+            </p>
           </div>
         </div>
       ) : (
-        <div className="border border-navy-200 bg-white rounded-xl p-4 shadow-sm">
+        <div className="border border-neutral-border bg-surface rounded p-3 shadow-sm">
           <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg bg-navy-100 flex items-center justify-center text-navy-700 shrink-0">
+            <div className="flex items-center space-x-2.5">
+              <div className="w-8 h-8 rounded bg-warm border border-neutral-border flex items-center justify-center text-muted shrink-0">
                 {selectedFile.type === 'application/pdf' ? (
-                  <FileText className="w-5 h-5 text-red-600" />
+                  <FileText className="w-4 h-4 text-charcoal" />
                 ) : (
-                  <ImageIcon className="w-5 h-5 text-teal-600" />
+                  <ImageIcon className="w-4 h-4 text-charcoal" />
                 )}
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-navy-900 truncate max-w-xs sm:max-w-md">
+                <p className="text-xs font-medium text-charcoal truncate max-w-xs sm:max-w-md">
                   {selectedFile.name}
                 </p>
-                <p className="text-xs text-navy-500">
+                <p className="text-[11px] text-muted">
                   {(selectedFile.size / 1024).toFixed(1)} KB &bull;{' '}
                   {selectedFile.type === 'application/pdf' ? 'PDF Document' : 'Image Screenshot'}
                 </p>
@@ -200,35 +196,35 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
             <button
               type="button"
               onClick={handleRemove}
-              className="text-navy-400 hover:text-red-600 p-1 rounded-lg hover:bg-navy-50 transition"
-              title="Remove document"
+              className="text-muted hover:text-danger-text p-1 rounded hover:bg-warm transition"
+              title="Remove file"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
 
           {/* Processing Status */}
           {isProcessing && (
-            <div className="mt-3 flex items-center space-x-2 text-xs text-teal-700 bg-teal-50 px-3 py-2 rounded-lg border border-teal-200">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-teal-600" />
+            <div className="mt-2.5 flex items-center space-x-2 text-xs text-muted bg-warm px-2.5 py-1.5 rounded border border-neutral-border">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-muted" />
               <span>{processingStatus || 'Analyzing document...'}</span>
             </div>
           )}
 
           {!isProcessing && processingStatus && (
-            <div className="mt-3 flex items-center space-x-2 text-xs text-teal-800 bg-teal-50 px-3 py-2 rounded-lg border border-teal-200">
-              <CheckCircle className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+            <div className="mt-2.5 flex items-center space-x-2 text-xs text-forest bg-sage px-2.5 py-1.5 rounded border border-sage-border">
+              <CheckCircle className="w-3.5 h-3.5 text-forest shrink-0" />
               <span>{processingStatus}</span>
             </div>
           )}
 
-          {/* OCR Fallback Notice for Images */}
+          {/* OCR Fallback Notice */}
           {ocrNotice && (
-            <div className="mt-3 text-xs bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-lg flex items-start space-x-2">
-              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-semibold mb-0.5">OCR Unavailable in Lightweight Tier</p>
-                <p className="text-amber-800 leading-relaxed">{ocrNotice}</p>
+            <div className="mt-2.5 text-xs bg-warning-bg border border-warning-border text-warning-text p-2.5 rounded flex items-start space-x-2">
+              <AlertCircle className="w-3.5 h-3.5 text-warning-text shrink-0 mt-0.5" />
+              <div className="leading-relaxed">
+                <p className="font-semibold text-charcoal mb-0.5">OCR Unavailable in Lightweight Tier</p>
+                <p className="text-muted text-[11px]">{ocrNotice}</p>
               </div>
             </div>
           )}
@@ -236,16 +232,15 @@ export function DocumentUpload({ onDocumentProcessed, onTextAppendedToForm }: Do
       )}
 
       {errorMsg && (
-        <div className="text-xs text-red-700 bg-red-50 border border-red-200 p-2.5 rounded-lg flex items-center space-x-2">
-          <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+        <div className="text-xs text-danger-text bg-danger-bg border border-danger-border p-2.5 rounded flex items-center space-x-2">
+          <AlertCircle className="w-3.5 h-3.5 text-danger-text shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Privacy Guarantee Note */}
-      <div className="flex items-center space-x-1.5 text-[11px] text-navy-500 pt-1">
-        <Shield className="w-3.5 h-3.5 text-teal-600 shrink-0" />
-        <span>Document privacy: parsed locally in browser memory. Never uploaded to servers or stored.</span>
+      <div className="flex items-center space-x-1.5 text-[11px] text-muted pt-0.5">
+        <Shield className="w-3 h-3 text-muted shrink-0" />
+        <span>Document privacy: parsed locally in browser memory. Never uploaded or stored on servers.</span>
       </div>
     </div>
   );

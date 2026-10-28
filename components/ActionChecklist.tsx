@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle2, Copy, Check, ExternalLink, PhoneCall, AlertTriangle, Building2 } from 'lucide-react';
+import { CheckCircle2, Copy, Check, ExternalLink, PhoneCall, Building2 } from 'lucide-react';
 import { AssessmentStatus } from '@/lib/types';
 
 interface ActionChecklistProps {
@@ -28,14 +28,14 @@ Please confirm whether this company or recruiter is registered and authorized by
   };
 
   return (
-    <div className="bg-white border border-navy-200 rounded-xl p-5 sm:p-6 shadow-sm space-y-5">
+    <div className="bg-surface border border-neutral-border rounded-lg p-5 sm:p-6 shadow-sm space-y-5">
       <div>
-        <h4 className="text-base sm:text-lg font-bold text-navy-950 flex items-center space-x-2">
-          <CheckCircle2 className="w-5 h-5 text-teal-600" />
+        <h4 className="text-base font-semibold text-charcoal flex items-center space-x-2">
+          <CheckCircle2 className="w-5 h-5 text-forest" />
           <span>Recommended Next Steps</span>
         </h4>
-        <p className="text-xs text-navy-600 mt-1">
-          Follow these practical steps to protect your finances, academic record, and digital identity.
+        <p className="text-xs text-muted mt-1">
+          Practical precautions to verify recruiter legitimacy before sharing documents or accepting.
         </p>
       </div>
 
@@ -44,9 +44,9 @@ Please confirm whether this company or recruiter is registered and authorized by
         {steps.map((step, idx) => (
           <div
             key={idx}
-            className="flex items-start space-x-3 p-3 rounded-lg bg-navy-50/60 border border-navy-100 text-xs sm:text-sm text-navy-900"
+            className="flex items-start space-x-3 p-3 rounded-md bg-warm border border-neutral-border text-xs sm:text-sm text-charcoal"
           >
-            <span className="w-5 h-5 rounded-full bg-teal-600 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+            <span className="w-5 h-5 rounded-full bg-forest text-white flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5">
               {idx + 1}
             </span>
             <span className="leading-relaxed">{step}</span>
@@ -55,8 +55,8 @@ Please confirm whether this company or recruiter is registered and authorized by
       </div>
 
       {/* Quick External Indian Portals */}
-      <div className="pt-2 border-t border-navy-100">
-        <p className="text-xs font-bold text-navy-900 uppercase tracking-wider mb-2.5">
+      <div className="pt-3 border-t border-neutral-border">
+        <p className="text-xs font-semibold text-charcoal uppercase tracking-wider mb-2.5">
           Official Indian Verification & Reporting Portals:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
@@ -64,46 +64,46 @@ Please confirm whether this company or recruiter is registered and authorized by
             href="https://cybercrime.gov.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-2.5 rounded-lg border border-red-200 bg-red-50/50 hover:bg-red-50 text-red-900 font-semibold transition"
+            className="flex items-center justify-between p-2.5 rounded-md border border-danger-border bg-danger-bg hover:bg-danger-hover text-danger-text font-medium transition"
           >
             <div className="flex items-center space-x-2">
-              <PhoneCall className="w-4 h-4 text-red-600" />
+              <PhoneCall className="w-4 h-4 text-danger" />
               <span>National Cyber Crime Portal (1930)</span>
             </div>
-            <ExternalLink className="w-3.5 h-3.5 text-red-500" />
+            <ExternalLink className="w-3.5 h-3.5 text-danger/70" />
           </a>
 
           <a
             href="https://www.mca.gov.in/mcafoportal/checkCompanyName.do"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-2.5 rounded-lg border border-navy-200 bg-navy-50 hover:bg-navy-100/70 text-navy-900 font-semibold transition"
+            className="flex items-center justify-between p-2.5 rounded-md border border-neutral-border bg-warm hover:bg-neutral-hover text-charcoal font-medium transition"
           >
             <div className="flex items-center space-x-2">
-              <Building2 className="w-4 h-4 text-navy-700" />
+              <Building2 className="w-4 h-4 text-muted-700" />
               <span>MCA Master Company Record Search</span>
             </div>
-            <ExternalLink className="w-3.5 h-3.5 text-navy-500" />
+            <ExternalLink className="w-3.5 h-3.5 text-muted" />
           </a>
         </div>
       </div>
 
       {/* Share / Copy Summary for College Placement Cell */}
-      <div className="pt-2 border-t border-navy-100">
+      <div className="pt-3 border-t border-neutral-border">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold text-navy-900">
+          <span className="text-xs font-semibold text-charcoal">
             Share Summary with College TPO or Placement Cell:
           </span>
           <button
             onClick={copyTemplate}
-            className="inline-flex items-center space-x-1 text-xs font-medium text-teal-700 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded border border-teal-200 transition"
+            className="inline-flex items-center space-x-1.5 text-xs font-medium text-forest hover:text-forest-700 bg-sage hover:bg-sage-border/50 px-2.5 py-1 rounded-md border border-sage-border transition"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-teal-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-forest" /> : <Copy className="w-3.5 h-3.5 text-forest" />}
             <span>{copied ? 'Copied to Clipboard' : 'Copy Notice'}</span>
           </button>
         </div>
-        <p className="text-[11px] text-navy-600">
-          Paste this template into an email to your Training & Placement Officer (TPO) to confirm if this company is officially visiting campus.
+        <p className="text-[11px] text-muted">
+          Forward this formatted summary to your Training & Placement Officer (TPO) to verify if the recruiter is campus-approved.
         </p>
       </div>
     </div>

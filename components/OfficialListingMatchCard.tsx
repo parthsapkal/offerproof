@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import { OfficialListingMatchResult } from '@/lib/types';
 import {
   CheckCircle2,
-  AlertTriangle,
   AlertOctagon,
-  HelpCircle,
   AlertCircle,
   Info,
   ExternalLink,
@@ -15,7 +13,6 @@ import {
   FileCheck,
   UserCheck,
   ArrowRightCircle,
-  Sparkles,
   Lock,
 } from 'lucide-react';
 
@@ -33,7 +30,6 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
     listingUrl,
     sourceDomain,
     isIndependentlyVerifiedSource,
-    sourceType,
     checkedAt,
     fields,
     matchedCount,
@@ -49,41 +45,33 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
   const isStrongMatch = status === 'STRONG_MATCH';
   const isMismatch = status === 'MISMATCH_DETECTED';
   const isUnableToVerify = status === 'UNABLE_TO_VERIFY';
-  const isUnverifiedDomain = status === 'USER_PROVIDED_UNVERIFIED';
 
   const statusConfig = isStrongMatch
     ? {
-        border: 'border-teal-400 bg-teal-500/10 text-teal-300',
-        badge: 'bg-teal-500 text-navy-950 font-black',
+        border: 'border-sage-border',
+        badge: 'bg-forest text-white font-medium',
         icon: CheckCircle2,
-        bannerBg: 'bg-gradient-to-r from-teal-950 via-teal-900 to-navy-950',
+        bannerBg: 'bg-sage-light text-charcoal',
       }
     : isMismatch
     ? {
-        border: 'border-red-500 bg-red-500/10 text-red-300',
-        badge: 'bg-red-600 text-white font-black',
+        border: 'border-danger-border',
+        badge: 'bg-danger text-white font-medium',
         icon: AlertOctagon,
-        bannerBg: 'bg-gradient-to-r from-red-950 via-red-900 to-navy-950',
-      }
-    : isUnverifiedDomain
-    ? {
-        border: 'border-blue-400 bg-blue-500/10 text-blue-300',
-        badge: 'bg-blue-600 text-white font-bold',
-        icon: Info,
-        bannerBg: 'bg-gradient-to-r from-navy-950 via-slate-900 to-navy-950',
+        bannerBg: 'bg-danger-bg text-charcoal',
       }
     : isUnableToVerify
     ? {
-        border: 'border-amber-400 bg-amber-500/10 text-amber-300',
-        badge: 'bg-amber-600 text-white font-bold',
+        border: 'border-warning-border',
+        badge: 'bg-warning text-white font-medium',
         icon: AlertCircle,
-        bannerBg: 'bg-gradient-to-r from-amber-950 via-amber-900 to-navy-950',
+        bannerBg: 'bg-warning-bg text-charcoal',
       }
     : {
-        border: 'border-amber-400 bg-amber-500/10 text-amber-300',
-        badge: 'bg-amber-600 text-white font-bold',
-        icon: AlertTriangle,
-        bannerBg: 'bg-gradient-to-r from-navy-950 via-amber-950/40 to-navy-950',
+        border: 'border-neutral-border',
+        badge: 'bg-muted-700 text-white font-medium',
+        icon: Info,
+        bannerBg: 'bg-warm text-charcoal',
       };
 
   const StatusIcon = statusConfig.icon;
@@ -95,55 +83,54 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
   });
 
   return (
-    <div className="bg-white rounded-2xl border border-navy-200 shadow-md overflow-hidden space-y-6">
+    <div className="bg-surface rounded-md border border-neutral-border shadow-sm overflow-hidden space-y-5 text-charcoal">
       {/* Header Banner */}
-      <div className={`p-6 sm:p-7 text-white ${statusConfig.bannerBg} border-b border-navy-800`}>
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+      <div className={`p-5 sm:p-6 border-b border-neutral-border ${statusConfig.bannerBg}`}>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center space-x-1">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Independent Opportunity Cross-Verification</span>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted flex items-center space-x-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-forest" />
+              <span>Official Opportunity Cross-Verification</span>
             </span>
             {isSimulatedDemo && (
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-400 text-navy-950 px-2 py-0.5 rounded-full flex items-center space-x-1">
-                <Sparkles className="w-3 h-3" />
-                <span>Benchmark Demo Scenario</span>
+              <span className="text-[10px] font-medium uppercase tracking-wider bg-surface text-charcoal px-2 py-0.5 rounded border border-neutral-border">
+                Demonstration Scenario
               </span>
             )}
           </div>
-          <span className="text-xs text-navy-300">
-            Checked: {new Date(checkedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+          <span className="text-xs text-muted">
+            Checked {new Date(checkedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
           </span>
         </div>
 
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
             <div className="inline-flex items-center space-x-2 mb-2">
-              <span className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider flex items-center space-x-1.5 ${statusConfig.badge}`}>
-                <StatusIcon className="w-4 h-4" />
+              <span className={`px-2.5 py-0.5 rounded text-xs uppercase tracking-wider flex items-center space-x-1 ${statusConfig.badge}`}>
+                <StatusIcon className="w-3.5 h-3.5" />
                 <span>{statusLabel}</span>
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
+            <h3 className="text-lg sm:text-xl font-semibold text-charcoal">
               Official Listing Match Assessment
             </h3>
-            <p className="text-sm text-navy-200 max-w-2xl mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-charcoal/80 max-w-2xl mt-1 leading-relaxed">
               {summary}
             </p>
           </div>
 
           {/* Quick Metrics */}
           {fields.length > 0 && (
-            <div className="flex items-center space-x-2 text-xs bg-black/30 p-2.5 rounded-xl border border-white/10 shrink-0">
-              <span className="px-2 py-1 rounded bg-teal-500/20 text-teal-300 font-bold border border-teal-500/30">
+            <div className="flex items-center space-x-1.5 text-xs bg-surface p-2 rounded border border-neutral-border shrink-0">
+              <span className="px-2 py-0.5 rounded bg-sage text-forest font-medium border border-sage-border">
                 {matchedCount} Matched
               </span>
-              <span className={`px-2 py-1 rounded font-bold border ${
-                mismatchedCount > 0 ? 'bg-red-500/20 text-red-300 border-red-500/40 animate-pulse' : 'bg-navy-800 text-navy-400 border-navy-700'
+              <span className={`px-2 py-0.5 rounded font-medium border ${
+                mismatchedCount > 0 ? 'bg-danger-bg text-danger-text border-danger-border' : 'bg-warm text-muted border-neutral-border'
               }`}>
                 {mismatchedCount} Mismatched
               </span>
-              <span className="px-2 py-1 rounded bg-navy-800 text-navy-300 border border-navy-700">
+              <span className="px-2 py-0.5 rounded bg-warm text-muted border border-neutral-border">
                 {unavailableCount} N/A
               </span>
             </div>
@@ -151,14 +138,14 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
         </div>
 
         {/* Source Authenticity Info */}
-        <div className="mt-4 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between text-xs text-navy-300 gap-2">
+        <div className="mt-4 pt-3 border-t border-neutral-border flex flex-wrap items-center justify-between text-xs text-muted gap-2">
           <div className="flex items-center space-x-2">
-            <span className="font-semibold text-white">Listing Source:</span>
-            <span className="font-mono text-teal-300">{sourceDomain || 'None'}</span>
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+            <span className="font-medium text-charcoal">Listing Source:</span>
+            <span className="font-mono text-charcoal">{sourceDomain || 'None'}</span>
+            <span className={`px-2 py-0.5 rounded text-[10px] font-medium border ${
               isIndependentlyVerifiedSource
-                ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                ? 'bg-sage text-forest border-sage-border'
+                : 'bg-warning-bg text-warning-text border-warning-border'
             }`}>
               {isIndependentlyVerifiedSource ? 'Independently Verified Domain' : 'Unverified / Third-Party Source'}
             </span>
@@ -169,144 +156,145 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
               href={listingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-teal-400 hover:text-teal-300 underline underline-offset-2"
+              className="inline-flex items-center space-x-1 text-forest hover:text-forest-700 underline underline-offset-2"
             >
-              <span>View Submitted Listing URL</span>
+              <span>View Listing Source URL</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           )}
         </div>
       </div>
 
-      <div className="p-6 sm:p-7 space-y-7">
-        {/* ======================================================== */}
-        {/* THREE DISTINCT VERIFICATION PILLARS                     */}
-        {/* ======================================================== */}
+      <div className="p-5 sm:p-6 space-y-6">
+        {/* THREE DISTINCT VERIFICATION PILLARS */}
         <div>
           <div className="mb-3">
-            <h4 className="text-base font-bold text-navy-950 flex items-center space-x-2">
-              <Lock className="w-4 h-4 text-teal-600" />
-              <span>Independent Recruiter Verification (Three Separate Pillars)</span>
+            <h4 className="text-sm font-semibold text-charcoal flex items-center space-x-2">
+              <Lock className="w-4 h-4 text-forest" />
+              <span>Independent Recruiter Verification (Three Separate Questions)</span>
             </h4>
-            <p className="text-xs text-navy-600 mt-0.5">
-              A genuine listing does NOT prove the recruiter is real. Fraudsters regularly copy real job descriptions to extort students. These 3 questions must be evaluated independently:
+            <p className="text-xs text-muted mt-0.5">
+              A genuine listing does NOT prove the recruiter is real. Fraudulent operators frequently copy legitimate job descriptions. Evaluate these 3 questions independently:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
             {/* Pillar 1: Company Legitimacy */}
-            <div className="p-4 rounded-xl border border-navy-200 bg-navy-50/50 flex flex-col justify-between">
+            <div className="p-3.5 rounded border border-neutral-border bg-surface flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-navy-500 flex items-center space-x-1">
-                    <Building className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-muted flex items-center space-x-1">
+                    <Building className="w-3 h-3 text-muted" />
                     <span>1. Company Legitimacy</span>
                   </span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${
                     threePillarVerification.companyLegitimacy.status === 'VERIFIED'
-                      ? 'bg-teal-100 text-teal-800'
-                      : 'bg-amber-100 text-amber-800'
+                      ? 'bg-sage text-forest border-sage-border'
+                      : 'bg-warning-bg text-warning-text border-warning-border'
                   }`}>
                     {threePillarVerification.companyLegitimacy.label}
                   </span>
                 </div>
-                <p className="text-xs font-bold text-navy-900 mb-1">
+                <p className="text-xs font-semibold text-charcoal mb-1">
                   Does the company exist?
                 </p>
-                <p className="text-xs text-navy-700 leading-relaxed mb-3">
+                <p className="text-xs text-muted leading-relaxed mb-3">
                   {threePillarVerification.companyLegitimacy.summary}
                 </p>
               </div>
-              <div className="text-[11px] text-navy-600 border-t border-navy-200/80 pt-2">
-                <strong>Next: </strong>{threePillarVerification.companyLegitimacy.actionRequired}
+              <div className="text-[11px] text-muted border-t border-neutral-border pt-2">
+                <strong className="text-charcoal font-medium">Next: </strong>
+                {threePillarVerification.companyLegitimacy.actionRequired}
               </div>
             </div>
 
             {/* Pillar 2: Official Listing Match */}
-            <div className="p-4 rounded-xl border border-navy-200 bg-navy-50/50 flex flex-col justify-between">
+            <div className="p-3.5 rounded border border-neutral-border bg-surface flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-navy-500 flex items-center space-x-1">
-                    <FileCheck className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-muted flex items-center space-x-1">
+                    <FileCheck className="w-3 h-3 text-muted" />
                     <span>2. Listing Consistency</span>
                   </span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${
                     threePillarVerification.listingMatch.status === 'VERIFIED'
-                      ? 'bg-teal-100 text-teal-800'
+                      ? 'bg-sage text-forest border-sage-border'
                       : threePillarVerification.listingMatch.status === 'MISMATCH'
-                      ? 'bg-red-100 text-red-800'
-                      : 'bg-amber-100 text-amber-800'
+                      ? 'bg-danger-bg text-danger-text border-danger-border'
+                      : 'bg-warning-bg text-warning-text border-warning-border'
                   }`}>
                     {threePillarVerification.listingMatch.label}
                   </span>
                 </div>
-                <p className="text-xs font-bold text-navy-900 mb-1">
+                <p className="text-xs font-semibold text-charcoal mb-1">
                   Does the role match an official opening?
                 </p>
-                <p className="text-xs text-navy-700 leading-relaxed mb-3">
+                <p className="text-xs text-muted leading-relaxed mb-3">
                   {threePillarVerification.listingMatch.summary}
                 </p>
               </div>
-              <div className="text-[11px] text-navy-600 border-t border-navy-200/80 pt-2">
-                <strong>Next: </strong>{threePillarVerification.listingMatch.actionRequired}
+              <div className="text-[11px] text-muted border-t border-neutral-border pt-2">
+                <strong className="text-charcoal font-medium">Next: </strong>
+                {threePillarVerification.listingMatch.actionRequired}
               </div>
             </div>
 
             {/* Pillar 3: Recruiter Authority */}
-            <div className={`p-4 rounded-xl border flex flex-col justify-between ${
+            <div className={`p-3.5 rounded border flex flex-col justify-between ${
               threePillarVerification.recruiterAuthorization.status === 'SUSPICIOUS'
-                ? 'bg-red-50/60 border-red-300'
+                ? 'bg-danger-bg/50 border-danger-border'
                 : threePillarVerification.recruiterAuthorization.status === 'CONFIRMED'
-                ? 'bg-teal-50/60 border-teal-300'
-                : 'bg-amber-50/60 border-amber-300'
+                ? 'bg-sage-light border-sage-border'
+                : 'bg-warning-bg/50 border-warning-border'
             }`}>
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-navy-500 flex items-center space-x-1">
-                    <UserCheck className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-muted flex items-center space-x-1">
+                    <UserCheck className="w-3 h-3 text-muted" />
                     <span>3. Recruiter Authority</span>
                   </span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${
                     threePillarVerification.recruiterAuthorization.status === 'CONFIRMED'
-                      ? 'bg-teal-600 text-white'
+                      ? 'bg-forest text-white border-forest'
                       : threePillarVerification.recruiterAuthorization.status === 'SUSPICIOUS'
-                      ? 'bg-red-600 text-white'
-                      : 'bg-amber-600 text-white'
+                      ? 'bg-danger text-white border-danger'
+                      : 'bg-warning text-white border-warning'
                   }`}>
                     {threePillarVerification.recruiterAuthorization.label}
                   </span>
                 </div>
-                <p className="text-xs font-bold text-navy-900 mb-1">
+                <p className="text-xs font-semibold text-charcoal mb-1">
                   Is this recruiter authorized?
                 </p>
-                <p className="text-xs text-navy-700 leading-relaxed mb-3">
+                <p className="text-xs text-muted leading-relaxed mb-3">
                   {threePillarVerification.recruiterAuthorization.summary}
                 </p>
               </div>
-              <div className="text-[11px] text-navy-800 border-t border-navy-300/60 pt-2">
-                <strong>Action: </strong>{threePillarVerification.recruiterAuthorization.actionRequired}
+              <div className="text-[11px] text-muted border-t border-neutral-border pt-2">
+                <strong className="text-charcoal font-medium">Action: </strong>
+                {threePillarVerification.recruiterAuthorization.actionRequired}
               </div>
             </div>
           </div>
 
           {/* Safety Rule Note */}
-          <div className="mt-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-950 flex items-start space-x-2">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold">Student Safety Principle: </span>
-              <span>{threePillarVerification.guidanceNote}</span>
+          <div className="mt-3 p-3 rounded bg-warm border border-neutral-border text-xs text-charcoal flex items-start space-x-2">
+            <Info className="w-4 h-4 text-muted shrink-0 mt-0.5" />
+            <div className="leading-relaxed">
+              <span className="font-semibold text-charcoal">Student Safety Guidance: </span>
+              <span className="text-muted">{threePillarVerification.guidanceNote}</span>
             </div>
           </div>
         </div>
 
         {/* Suspicious Differences Warning Callout */}
         {suspiciousDifferences.length > 0 && (
-          <div className="p-4 rounded-xl bg-red-50 border border-red-300 text-red-950 space-y-2">
-            <div className="flex items-center space-x-2 font-bold text-sm text-red-800">
-              <AlertOctagon className="w-5 h-5 text-red-600" />
+          <div className="p-4 rounded bg-danger-bg border border-danger-border text-charcoal space-y-1.5">
+            <div className="flex items-center space-x-2 font-semibold text-xs uppercase tracking-wider text-danger-text">
+              <AlertOctagon className="w-4 h-4 text-danger-text" />
               <span>Critical Discrepancies Detected Against Public Requisition</span>
             </div>
-            <ul className="space-y-1.5 text-xs text-red-900 pl-6 list-disc font-medium">
+            <ul className="space-y-1 text-xs text-charcoal/90 pl-5 list-disc font-medium">
               {suspiciousDifferences.map((diff, idx) => (
                 <li key={idx}>{diff}</li>
               ))}
@@ -314,56 +302,54 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
           </div>
         )}
 
-        {/* ======================================================== */}
-        {/* FIELD-BY-FIELD COMPARISON TABLE                          */}
-        {/* ======================================================== */}
+        {/* FIELD-BY-FIELD COMPARISON TABLE */}
         {fields.length > 0 && (
           <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h4 className="text-base font-bold text-navy-950">
-                  Field-by-Field Discrepancy Matrix ({fields.length} Fields Analyzed)
+                <h4 className="text-sm font-semibold text-charcoal">
+                  Field-by-Field Comparison Matrix ({fields.length} Fields Checked)
                 </h4>
-                <p className="text-xs text-navy-600">
+                <p className="text-xs text-muted">
                   Compares values extracted from the submitted offer against the public requisition.
                 </p>
               </div>
 
               {/* Filter tabs */}
-              <div className="flex space-x-1 bg-navy-100 p-1 rounded-lg text-xs font-semibold">
+              <div className="flex space-x-1 bg-warm p-1 rounded border border-neutral-border text-xs">
                 <button
                   onClick={() => setFilterMode('ALL')}
-                  className={`px-2.5 py-1 rounded transition ${filterMode === 'ALL' ? 'bg-white shadow text-navy-950 font-bold' : 'text-navy-600'}`}
+                  className={`px-2 py-0.5 rounded transition ${filterMode === 'ALL' ? 'bg-surface shadow-sm text-charcoal font-medium' : 'text-muted'}`}
                 >
                   All ({fields.length})
                 </button>
                 <button
                   onClick={() => setFilterMode('MISMATCH')}
-                  className={`px-2.5 py-1 rounded transition ${filterMode === 'MISMATCH' ? 'bg-red-600 text-white font-bold' : 'text-red-700'}`}
+                  className={`px-2 py-0.5 rounded transition ${filterMode === 'MISMATCH' ? 'bg-danger text-white font-medium' : 'text-danger-text'}`}
                 >
                   Mismatches ({mismatchedCount})
                 </button>
                 <button
                   onClick={() => setFilterMode('MATCH')}
-                  className={`px-2.5 py-1 rounded transition ${filterMode === 'MATCH' ? 'bg-teal-600 text-white font-bold' : 'text-teal-700'}`}
+                  className={`px-2 py-0.5 rounded transition ${filterMode === 'MATCH' ? 'bg-forest text-white font-medium' : 'text-forest'}`}
                 >
                   Matches ({matchedCount})
                 </button>
               </div>
             </div>
 
-            <div className="border border-navy-200 rounded-xl overflow-x-auto shadow-sm">
+            <div className="border border-neutral-border rounded overflow-x-auto shadow-sm">
               <table className="w-full text-left text-xs">
-                <thead className="bg-navy-950 text-white uppercase text-[10px] tracking-wider font-bold">
+                <thead className="bg-warm text-muted uppercase text-[10px] tracking-wider font-semibold border-b border-neutral-border">
                   <tr>
-                    <th className="py-3 px-3.5">Opportunity Field</th>
-                    <th className="py-3 px-3.5">Submitted Offer Value</th>
-                    <th className="py-3 px-3.5">Official Listing Value</th>
-                    <th className="py-3 px-3.5 text-center">Status</th>
-                    <th className="py-3 px-3.5">Evidence & Explanation</th>
+                    <th className="py-2.5 px-3">Opportunity Field</th>
+                    <th className="py-2.5 px-3">Submitted Offer Value</th>
+                    <th className="py-2.5 px-3">Official Listing Value</th>
+                    <th className="py-2.5 px-3 text-center">Status</th>
+                    <th className="py-2.5 px-3">Evidence & Explanation</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-navy-100 bg-white">
+                <tbody className="divide-y divide-neutral-border bg-surface">
                   {filteredFields.map((field) => {
                     const isFieldMatch = field.status === 'MATCH';
                     const isFieldMismatch = field.status === 'MISMATCH';
@@ -371,43 +357,37 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
                     return (
                       <tr
                         key={field.fieldName}
-                        className={`transition hover:bg-navy-50/60 ${
-                          field.isSecurityCritical && isFieldMismatch ? 'bg-red-50/70 font-semibold' : ''
+                        className={`transition hover:bg-neutral-subtle ${
+                          field.isSecurityCritical && isFieldMismatch ? 'bg-danger-bg/40 font-medium' : ''
                         }`}
                       >
-                        <td className="py-3 px-3.5 font-bold text-navy-950 whitespace-nowrap">
+                        <td className="py-2.5 px-3 font-medium text-charcoal whitespace-nowrap">
                           {field.fieldLabel}
                         </td>
-                        <td className="py-3 px-3.5 text-navy-800 font-mono text-[11px] max-w-xs break-words">
+                        <td className="py-2.5 px-3 text-charcoal font-mono text-[11px] max-w-xs break-words">
                           {field.submittedValue || '—'}
                         </td>
-                        <td className="py-3 px-3.5 text-navy-800 font-mono text-[11px] max-w-xs break-words">
+                        <td className="py-2.5 px-3 text-charcoal font-mono text-[11px] max-w-xs break-words">
                           {field.listingValue || '—'}
                         </td>
-                        <td className="py-3 px-3.5 text-center whitespace-nowrap">
-                          <span className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold ${
+                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                          <span className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-medium border ${
                             isFieldMatch
-                              ? 'bg-teal-100 text-teal-800 border border-teal-300'
+                              ? 'bg-sage text-forest border-sage-border'
                               : isFieldMismatch
-                              ? 'bg-red-100 text-red-800 border border-red-300'
-                              : 'bg-navy-100 text-navy-600'
+                              ? 'bg-danger-bg text-danger-text border-danger-border'
+                              : 'bg-warm text-muted border-neutral-border'
                           }`}>
                             {isFieldMatch ? (
-                              <>
-                                <CheckCircle2 className="w-3 h-3 text-teal-600" />
-                                <span>Match</span>
-                              </>
+                              <span>Match</span>
                             ) : isFieldMismatch ? (
-                              <>
-                                <AlertOctagon className="w-3 h-3 text-red-600" />
-                                <span>Mismatch</span>
-                              </>
+                              <span>Mismatch</span>
                             ) : (
                               <span>Not Available</span>
                             )}
                           </span>
                         </td>
-                        <td className="py-3 px-3.5 text-navy-700 text-xs">
+                        <td className="py-2.5 px-3 text-muted text-xs">
                           {field.explanation}
                         </td>
                       </tr>
@@ -420,16 +400,16 @@ export function OfficialListingMatchCard({ matchResult }: OfficialListingMatchCa
         )}
 
         {/* Recommended Actions for Listing Result */}
-        <div className="bg-navy-50 rounded-xl p-4 sm:p-5 border border-navy-200">
-          <h5 className="font-bold text-navy-950 text-xs uppercase tracking-wider mb-2 flex items-center space-x-1.5">
-            <ArrowRightCircle className="w-4 h-4 text-teal-600" />
-            <span>Recommended Next Steps Based on Listing Evidence:</span>
+        <div className="bg-warm rounded p-4 border border-neutral-border">
+          <h5 className="font-semibold text-charcoal text-xs uppercase tracking-wider mb-2 flex items-center space-x-1.5">
+            <ArrowRightCircle className="w-3.5 h-3.5 text-forest" />
+            <span>Recommended Steps Based on Listing Evidence:</span>
           </h5>
-          <ul className="space-y-1.5 text-xs text-navy-800">
+          <ul className="space-y-1 text-xs text-muted">
             {recommendedNextSteps.map((step, idx) => (
               <li key={idx} className="flex items-start space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-600 mt-1.5 shrink-0" />
-                <span>{step}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-forest mt-1.5 shrink-0" />
+                <span className="text-charcoal/90">{step}</span>
               </li>
             ))}
           </ul>

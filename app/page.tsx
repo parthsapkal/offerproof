@@ -111,11 +111,11 @@ export default function HomePage() {
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         {/* API Error Notification */}
         {apiError && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-900 flex items-start space-x-3 text-sm">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+          <div className="mb-6 p-4 rounded-lg bg-danger-bg border border-danger-border text-danger-text flex items-start space-x-3 text-sm">
+            <AlertCircle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold">Verification Error</p>
-              <p className="text-red-800">{apiError}</p>
+              <p className="font-semibold text-charcoal">Verification Error</p>
+              <p className="text-danger-text mt-0.5">{apiError}</p>
             </div>
           </div>
         )}

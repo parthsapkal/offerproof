@@ -14,15 +14,12 @@ import {
   MessageSquare,
   IndianRupee,
   FileText,
-  AlertCircle,
   Loader2,
   ShieldCheck,
-  Sparkles,
   MapPin,
   Calendar,
   Clock,
   Hash,
-  CheckCircle2,
 } from 'lucide-react';
 
 interface VerificationFormProps {
@@ -33,10 +30,10 @@ interface VerificationFormProps {
 }
 
 const SOURCES: { value: OfferSource; label: string }[] = [
-  { value: 'linkedin', label: 'LinkedIn (Job Board / Recruiter DM)' },
+  { value: 'linkedin', label: 'LinkedIn (Job Board / Direct Message)' },
   { value: 'campus', label: 'College Placement Cell (TPO Drive)' },
   { value: 'internshala', label: 'Internshala Portal' },
-  { value: 'telegram', label: 'Telegram (Group / Channel / DM)' },
+  { value: 'telegram', label: 'Telegram (Channel / Direct Message)' },
   { value: 'whatsapp', label: 'WhatsApp (Direct Message)' },
   { value: 'cold_email', label: 'Cold / Unsolicited Email' },
   { value: 'job_portal', label: 'Job Portal (Naukri / Indeed / Unstop)' },
@@ -127,12 +124,12 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
 
     if (formData.feeRequested) {
       if (!formData.feeAmount && !(formData.feeReason || '').trim()) {
-        errs.feeAmount = 'Please specify the fee amount or reason requested.';
+        errs.feeAmount = 'Please specify the fee amount or stated reason.';
       }
     }
 
     if (formData.recruiterEmail && !formData.recruiterEmail.includes('@')) {
-      errs.recruiterEmail = 'Please provide a valid email format (e.g., recruiter@company.com).';
+      errs.recruiterEmail = 'Please provide a valid email format (e.g., name@company.com).';
     }
 
     setErrors(errs);
@@ -170,47 +167,44 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
   };
 
   return (
-    <div id="verification-form-container" className="bg-white rounded-2xl border border-navy-200 shadow-xl overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-navy-950 via-navy-900 to-navy-950 px-6 sm:px-8 py-6 text-white border-b border-navy-800">
-        <div className="flex items-center space-x-2 text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">
+    <div id="verification-form-container" className="bg-surface rounded-md border border-neutral-border shadow-sm overflow-hidden">
+      {/* Form Header */}
+      <div className="bg-surface px-6 py-5 border-b border-neutral-border">
+        <div className="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-forest mb-1">
           <ShieldCheck className="w-4 h-4" />
-          <span>Independent Assessment & Official Listing Match Intake</span>
+          <span>Opportunity Details Intake</span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-black text-white">
-          Internship Offer Verification Form
+        <h2 className="text-lg sm:text-xl font-semibold text-charcoal">
+          Offer Verification & Listing Cross-Check
         </h2>
-        <p className="text-navy-300 text-xs sm:text-sm mt-1">
-          Provide your offer details and optionally compare with an official public requisition. Our engine validates lookalike domains, payment extortion, and discrepancies against authorized listings.
+        <p className="text-xs sm:text-sm text-muted mt-1 leading-relaxed">
+          Submit the parameters of your offer. The engine evaluates recruiter domain alignment, advance-fee red flags, and discrepancies against the company's published careers listing.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-7">
-        {/* ======================================================== */}
-        {/* QUICK 5-SCENARIO BENCHMARK PICKER                        */}
-        {/* ======================================================== */}
-        <div className="bg-navy-50/70 border border-navy-200 rounded-xl p-4 space-y-2.5">
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        {/* Scenario Quick Selector */}
+        <div className="bg-warm border border-neutral-border rounded p-3.5 space-y-2">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-navy-900 flex items-center space-x-1.5">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Official Listing Match: Judge Demo Scenarios</span>
+            <span className="text-xs font-semibold text-charcoal">
+              Test Scenarios (Demonstrations)
             </span>
-            <span className="text-[11px] text-navy-500">
-              Select a scenario to populate test values, or enter custom details below.
+            <span className="text-[11px] text-muted">
+              Load an illustrative case or enter custom details.
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             <button
               type="button"
               onClick={() => handleSelectScenario('')}
-              className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition border ${
+              className={`text-xs px-2.5 py-1 rounded transition border ${
                 activeDemo === ''
-                  ? 'bg-navy-900 text-white border-navy-900 shadow-sm'
-                  : 'bg-white text-navy-700 border-navy-300 hover:bg-navy-100'
+                  ? 'bg-charcoal text-white border-charcoal font-medium'
+                  : 'bg-surface text-muted border-neutral-border hover:text-charcoal hover:bg-neutral-subtle'
               }`}
             >
-              Custom / Live Fetch
+              Custom Input
             </button>
 
             {Object.entries(DEMO_SCENARIOS).map(([key, demo]) => (
@@ -218,10 +212,10 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
                 key={key}
                 type="button"
                 onClick={() => handleSelectScenario(key)}
-                className={`text-xs px-2.5 py-1.5 rounded-lg font-semibold transition border ${
+                className={`text-xs px-2.5 py-1 rounded transition border ${
                   activeDemo === key
-                    ? 'bg-teal-600 text-white border-teal-600 shadow-sm'
-                    : 'bg-white text-navy-700 border-navy-300 hover:bg-navy-100'
+                    ? 'bg-forest text-white border-forest font-medium'
+                    : 'bg-surface text-muted border-neutral-border hover:text-charcoal hover:bg-neutral-subtle'
                 }`}
                 title={demo.description}
               >
@@ -231,167 +225,164 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
           </div>
 
           {activeDemo && DEMO_SCENARIOS[activeDemo] && (
-            <p className="text-[11px] text-teal-800 bg-teal-50 p-2 rounded border border-teal-200 font-medium">
-              <strong>Active Demo: </strong>{DEMO_SCENARIOS[activeDemo].description}
+            <p className="text-[11px] text-muted bg-surface p-2 rounded border border-neutral-border mt-1">
+              <strong className="text-charcoal font-medium">Loaded Scenario: </strong>
+              {DEMO_SCENARIOS[activeDemo].description}
             </p>
           )}
         </div>
 
-        {/* ======================================================== */}
-        {/* Section 1: Core Company & Role Identification            */}
-        {/* ======================================================== */}
+        {/* Section 1: Company & Role */}
         <div className="space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-navy-800 pb-1 border-b border-navy-100 flex items-center space-x-1.5">
-            <Building2 className="w-4 h-4 text-teal-600" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted pb-1 border-b border-neutral-border flex items-center space-x-1.5">
+            <Building2 className="w-3.5 h-3.5 text-forest" />
             <span>1. Company & Role Identification</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Company Name */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-                Claimed Company Name <span className="text-red-600">*</span>
+              <label className="block text-xs font-medium text-charcoal mb-1">
+                Company Name <span className="text-danger-text">*</span>
               </label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Razorpay, Swiggy, TCS, Apex Solutions"
+                placeholder="e.g. Razorpay, Thoughtworks, Swiggy"
                 value={formData.companyName}
                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                className={`w-full text-sm px-3.5 py-2.5 rounded-xl border ${
-                  errors.companyName ? 'border-red-500 bg-red-50/20' : 'border-navy-300 focus:border-teal-500'
-                } focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400`}
+                className={`w-full text-xs sm:text-sm px-3 py-2 rounded border ${
+                  errors.companyName ? 'border-danger-border bg-danger-bg' : 'border-neutral-border focus:border-forest'
+                } outline-none text-charcoal placeholder:text-muted/60 transition`}
               />
               {errors.companyName && (
-                <p className="text-xs text-red-600 mt-1 font-medium">{errors.companyName}</p>
+                <p className="text-xs text-danger-text mt-1">{errors.companyName}</p>
               )}
             </div>
 
             {/* Company Website */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-medium text-charcoal mb-1">
                 Company Website
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                  <Globe className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <Globe className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g. https://razorpay.com"
+                  placeholder="e.g. https://company.com"
                   value={formData.companyWebsite}
                   onChange={(e) => setFormData({ ...formData, companyWebsite: e.target.value })}
-                  className="w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400"
+                  className="w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border border-neutral-border focus:border-forest outline-none text-charcoal placeholder:text-muted/60 transition"
                 />
               </div>
             </div>
 
             {/* Job Title */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-                Job Title / Internship Role
+              <label className="block text-xs font-medium text-charcoal mb-1">
+                Job or Internship Title
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                  <Briefcase className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <Briefcase className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g. Software Engineering Intern, Growth Operations"
+                  placeholder="e.g. Software Engineering Intern"
                   value={formData.jobTitle}
                   onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
-                  className="w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400"
+                  className="w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border border-neutral-border focus:border-forest outline-none text-charcoal placeholder:text-muted/60 transition"
                 />
               </div>
             </div>
 
-            {/* Requisition / Job ID */}
+            {/* Requisition ID */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-                Job / Requisition ID (Optional)
+              <label className="block text-xs font-medium text-charcoal mb-1">
+                Requisition / Job ID (Optional)
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                  <Hash className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <Hash className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g. RZP-ENG-2025-042 or REQ-9102"
+                  placeholder="e.g. RZP-ENG-2025-042"
                   value={formData.jobId || ''}
                   onChange={(e) => setFormData({ ...formData, jobId: e.target.value })}
-                  className="w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400"
+                  className="w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border border-neutral-border focus:border-forest outline-none text-charcoal placeholder:text-muted/60 transition"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* ======================================================== */}
-        {/* Section 2: Recruiter Identity & Channel                  */}
-        {/* ======================================================== */}
+        {/* Section 2: Recruiter & Source */}
         <div className="space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-navy-800 pb-1 border-b border-navy-100 flex items-center space-x-1.5">
-            <User className="w-4 h-4 text-teal-600" />
-            <span>2. Recruiter Identity & Channel</span>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted pb-1 border-b border-neutral-border flex items-center space-x-1.5">
+            <User className="w-3.5 h-3.5 text-forest" />
+            <span>2. Recruiter Identity & Communication Channel</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* Recruiter Name */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-                Recruiter / Contact Name
+              <label className="block text-xs font-medium text-charcoal mb-1">
+                Recruiter Name
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                  <User className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <User className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g. Priya Nair (HR)"
+                  placeholder="e.g. Priya Nair (Campus Team)"
                   value={formData.recruiterName}
                   onChange={(e) => setFormData({ ...formData, recruiterName: e.target.value })}
-                  className="w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400"
+                  className="w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border border-neutral-border focus:border-forest outline-none text-charcoal placeholder:text-muted/60 transition"
                 />
               </div>
             </div>
 
             {/* Recruiter Email */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-                Recruiter Contact Email
+              <label className="block text-xs font-medium text-charcoal mb-1">
+                Recruiter Email
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                  <Mail className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <Mail className="w-3.5 h-3.5" />
                 </div>
                 <input
                   type="text"
                   placeholder="e.g. priya.nair@company.com"
                   value={formData.recruiterEmail}
                   onChange={(e) => setFormData({ ...formData, recruiterEmail: e.target.value })}
-                  className={`w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border ${
-                    errors.recruiterEmail ? 'border-red-500 bg-red-50/20' : 'border-navy-300 focus:border-teal-500'
-                  } focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400`}
+                  className={`w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border ${
+                    errors.recruiterEmail ? 'border-danger-border bg-danger-bg' : 'border-neutral-border focus:border-forest'
+                  } outline-none text-charcoal placeholder:text-muted/60 transition`}
                 />
               </div>
               {errors.recruiterEmail && (
-                <p className="text-xs text-red-600 mt-1 font-medium">{errors.recruiterEmail}</p>
+                <p className="text-xs text-danger-text mt-1">{errors.recruiterEmail}</p>
               )}
             </div>
 
             {/* Offer Source */}
             <div>
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-                Offer Communication Channel
+              <label className="block text-xs font-medium text-charcoal mb-1">
+                Recruitment Channel
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                  <MessageSquare className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <MessageSquare className="w-3.5 h-3.5" />
                 </div>
                 <select
                   value={formData.offerSource}
                   onChange={(e) => setFormData({ ...formData, offerSource: e.target.value as OfferSource })}
-                  className="w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 bg-white"
+                  className="w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border border-neutral-border focus:border-forest outline-none text-charcoal bg-surface transition"
                 >
                   {SOURCES.map((s) => (
                     <option key={s.value} value={s.value}>
@@ -404,145 +395,131 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
           </div>
         </div>
 
-        {/* ======================================================== */}
-        {/* Section 3: Official Listing Match & Opportunity Terms    */}
-        {/* ======================================================== */}
+        {/* Section 3: Official Listing Cross-Check */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between pb-1 border-b border-navy-100">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-navy-800 flex items-center space-x-1.5">
-              <LinkIcon className="w-4 h-4 text-teal-600" />
-              <span>3. Official Listing Match & Opportunity Terms</span>
+          <div className="flex items-center justify-between pb-1 border-b border-neutral-border">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted flex items-center space-x-1.5">
+              <LinkIcon className="w-3.5 h-3.5 text-forest" />
+              <span>3. Official Listing Match (Cross-Check)</span>
             </h3>
-            <span className="text-[11px] font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
-              Recommended Feature
+            <span className="text-[11px] font-medium text-forest bg-sage px-2 py-0.5 rounded border border-sage-border">
+              Supported Sources Check
             </span>
           </div>
 
-          <p className="text-xs text-navy-600">
-            Provide the original public job opening link and opportunity parameters. The engine compares stipend, requisition ID, and payment policies against the published listing.
+          <p className="text-xs text-muted">
+            Provide the company's published listing URL to compare role ID, stipend, and fee requirements.
           </p>
 
-          {/* Job Listing URL */}
           <div>
-            <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1.5">
-              Official Listing / Careers Page URL
+            <label className="block text-xs font-medium text-charcoal mb-1">
+              Official Listing URL
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-navy-400">
-                <LinkIcon className="w-4 h-4" />
+              <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                <LinkIcon className="w-3.5 h-3.5" />
               </div>
               <input
                 type="text"
-                placeholder="e.g. https://razorpay.com/careers/jobs/123 or https://boards.greenhouse.io/company/jobs/..."
+                placeholder="e.g. https://company.com/careers/jobs/123 or Greenhouse / Lever link"
                 value={formData.jobListingUrl}
                 onChange={(e) => setFormData({ ...formData, jobListingUrl: e.target.value, demoScenarioId: '' })}
-                className="w-full text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400"
+                className="w-full text-xs sm:text-sm pl-8 pr-3 py-2 rounded border border-neutral-border focus:border-forest outline-none text-charcoal placeholder:text-muted/60 transition"
               />
             </div>
-            <p className="text-[11px] text-navy-500 mt-1">
-              Supports official company careers domains and recognized platforms (Greenhouse, Lever, Workday, Internshala, Unstop).
-            </p>
           </div>
 
-          {/* Detailed Opportunity Terms Grid */}
+          {/* Opportunity Terms Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-1">
-            {/* Location */}
             <div>
-              <label className="block text-[11px] font-bold text-navy-800 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-medium text-muted mb-1">
                 Location / Work Mode
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-navy-400">
-                  <MapPin className="w-3.5 h-3.5" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <MapPin className="w-3 h-3" />
                 </div>
                 <input
                   type="text"
                   placeholder="e.g. Bangalore (Hybrid)"
                   value={formData.location || ''}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full text-xs pl-8 pr-2.5 py-2 rounded-lg border border-navy-300 focus:border-teal-500 outline-none text-navy-900"
+                  className="w-full text-xs pl-7 pr-2.5 py-1.5 rounded border border-neutral-border focus:border-forest outline-none text-charcoal"
                 />
               </div>
             </div>
 
-            {/* Compensation */}
             <div>
-              <label className="block text-[11px] font-bold text-navy-800 uppercase tracking-wider mb-1">
-                Stipend / Salary
+              <label className="block text-[11px] font-medium text-muted mb-1">
+                Stipend / Compensation
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-navy-400">
-                  <IndianRupee className="w-3.5 h-3.5" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <IndianRupee className="w-3 h-3" />
                 </div>
                 <input
                   type="text"
                   placeholder="e.g. \u20B935,000 / month"
                   value={formData.compensation || ''}
                   onChange={(e) => setFormData({ ...formData, compensation: e.target.value })}
-                  className="w-full text-xs pl-8 pr-2.5 py-2 rounded-lg border border-navy-300 focus:border-teal-500 outline-none text-navy-900 font-semibold"
+                  className="w-full text-xs pl-7 pr-2.5 py-1.5 rounded border border-neutral-border focus:border-forest outline-none text-charcoal font-medium"
                 />
               </div>
             </div>
 
-            {/* Duration */}
             <div>
-              <label className="block text-[11px] font-bold text-navy-800 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-medium text-muted mb-1">
                 Duration
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-navy-400">
-                  <Clock className="w-3.5 h-3.5" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <Clock className="w-3 h-3" />
                 </div>
                 <input
                   type="text"
                   placeholder="e.g. 6 Months"
                   value={formData.duration || ''}
                   onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  className="w-full text-xs pl-8 pr-2.5 py-2 rounded-lg border border-navy-300 focus:border-teal-500 outline-none text-navy-900"
+                  className="w-full text-xs pl-7 pr-2.5 py-1.5 rounded border border-neutral-border focus:border-forest outline-none text-charcoal"
                 />
               </div>
             </div>
 
-            {/* Deadline */}
             <div>
-              <label className="block text-[11px] font-bold text-navy-800 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-medium text-muted mb-1">
                 Application Deadline
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-navy-400">
-                  <Calendar className="w-3.5 h-3.5" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                  <Calendar className="w-3 h-3" />
                 </div>
                 <input
                   type="text"
                   placeholder="e.g. 15 Nov 2025"
                   value={formData.applicationDeadline || ''}
                   onChange={(e) => setFormData({ ...formData, applicationDeadline: e.target.value })}
-                  className="w-full text-xs pl-8 pr-2.5 py-2 rounded-lg border border-navy-300 focus:border-teal-500 outline-none text-navy-900"
+                  className="w-full text-xs pl-7 pr-2.5 py-1.5 rounded border border-neutral-border focus:border-forest outline-none text-charcoal"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* ======================================================== */}
-        {/* Section 4: Monetary / Fee Check                          */}
-        {/* ======================================================== */}
-        <div className="bg-red-50/40 border border-red-200/80 rounded-xl p-4 sm:p-5 space-y-4">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-2">
-              <IndianRupee className="w-5 h-5 text-red-600 shrink-0" />
-              <div>
-                <h3 className="text-sm font-bold text-red-950 uppercase tracking-wider">
-                  Payment or Deposit Demands
-                </h3>
-                <p className="text-xs text-red-800">
-                  Legitimate internships NEVER require student applicants to pay any fee.
-                </p>
-              </div>
+        {/* Section 4: Monetary Check */}
+        <div className="bg-warm border border-neutral-border rounded p-4 space-y-3">
+          <div className="flex items-center space-x-2">
+            <IndianRupee className="w-4 h-4 text-danger-text shrink-0" />
+            <div>
+              <h4 className="text-xs font-semibold text-charcoal">
+                Payment, Registration, or Deposit Mandate
+              </h4>
+              <p className="text-[11px] text-muted">
+                Under Indian labour standards and AICTE guidelines, legitimate employers never charge candidate fees.
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 bg-white p-3 rounded-lg border border-red-200">
+          <div className="flex items-center space-x-2.5 bg-surface p-2.5 rounded border border-neutral-border">
             <input
               type="checkbox"
               id="feeRequestedToggle"
@@ -555,22 +532,22 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
                   feeReason: e.target.checked ? formData.feeReason || 'Registration / Onboarding Kit' : '',
                 })
               }
-              className="w-4 h-4 text-red-600 rounded border-navy-300 focus:ring-red-500"
+              className="w-4 h-4 text-forest rounded border-neutral-border focus:ring-forest cursor-pointer"
             />
-            <label htmlFor="feeRequestedToggle" className="text-xs sm:text-sm font-bold text-red-950 cursor-pointer">
-              Did the recruiter or offer letter request ANY money, deposit, or fee?
+            <label htmlFor="feeRequestedToggle" className="text-xs font-medium text-charcoal cursor-pointer">
+              Did the recruiter or offer letter request any money, security deposit, or fee?
             </label>
           </div>
 
           {formData.feeRequested && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
               <div>
-                <label className="block text-xs font-bold text-red-950 uppercase tracking-wider mb-1">
-                  Requested Amount (in \u20B9 INR)
+                <label className="block text-[11px] font-medium text-charcoal mb-1">
+                  Requested Amount (INR &#8377;)
                 </label>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center font-bold text-navy-600">
-                    \u20B9
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs font-medium text-muted">
+                    &#8377;
                   </span>
                   <input
                     type="number"
@@ -583,34 +560,32 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
                         feeAmount: e.target.value ? Number(e.target.value) : null,
                       })
                     }
-                    className="w-full text-sm pl-8 pr-3 py-2 rounded-lg border border-red-300 focus:border-red-500 outline-none text-navy-950 font-bold"
+                    className="w-full text-xs pl-6 pr-2.5 py-1.5 rounded border border-neutral-border focus:border-forest outline-none text-charcoal font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-red-950 uppercase tracking-wider mb-1">
-                  Stated Fee Reason / Category
+                <label className="block text-[11px] font-medium text-charcoal mb-1">
+                  Stated Reason for Fee
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Registration fee, Laptop courier, Training kit deposit"
+                  placeholder="e.g. Laptop courier, Registration, Training materials"
                   value={formData.feeReason}
                   onChange={(e) => setFormData({ ...formData, feeReason: e.target.value })}
-                  className="w-full text-sm px-3 py-2 rounded-lg border border-red-300 focus:border-red-500 outline-none text-navy-950"
+                  className="w-full text-xs px-2.5 py-1.5 rounded border border-neutral-border focus:border-forest outline-none text-charcoal"
                 />
               </div>
             </div>
           )}
         </div>
 
-        {/* ======================================================== */}
-        {/* Section 5: Document Upload & Pasted Offer Text           */}
-        {/* ======================================================== */}
+        {/* Section 5: Document Upload & Offer Text */}
         <div className="space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-navy-800 pb-1 border-b border-navy-100 flex items-center space-x-1.5">
-            <FileText className="w-4 h-4 text-teal-600" />
-            <span>5. Offer Documentation & Text Analysis</span>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted pb-1 border-b border-neutral-border flex items-center space-x-1.5">
+            <FileText className="w-3.5 h-3.5 text-forest" />
+            <span>4. Offer Documentation & Text Analysis</span>
           </h3>
 
           <DocumentUpload
@@ -623,45 +598,45 @@ export function VerificationForm({ onSubmit, isLoading, initialData }: Verificat
           />
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-bold text-navy-900 uppercase tracking-wider">
-                Pasted Offer Email Body or Letter Text (Optional)
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-medium text-charcoal">
+                Offer Letter Text or Email Body (Optional)
               </label>
-              <span className="text-[11px] text-navy-500">
+              <span className="text-[11px] text-muted">
                 {formData.pastedText ? `${formData.pastedText.length} characters` : 'Optional'}
               </span>
             </div>
             <textarea
               rows={4}
-              placeholder="Paste the message, email text, or offer letter contents here. The engine scans for artificial deadlines ('pay within 4 hours'), typing job traps, and legal intimidation threats."
+              placeholder="Paste the offer email text or letter body. The engine scans for fine-print clauses, pressure deadlines ('pay within 4 hours'), and legal intimidation."
               value={formData.pastedText}
               onChange={(e) => setFormData({ ...formData, pastedText: e.target.value })}
-              className="w-full text-xs sm:text-sm p-3.5 rounded-xl border border-navy-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition text-navy-900 placeholder:text-navy-400 font-mono"
+              className="w-full text-xs p-3 rounded border border-neutral-border focus:border-forest outline-none text-charcoal placeholder:text-muted/60 font-mono transition"
             />
           </div>
         </div>
 
-        {/* Submit Button & Loading State */}
+        {/* Submit Button */}
         <div className="pt-2">
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-navy-950 font-extrabold text-base sm:text-lg py-4 px-6 rounded-xl shadow-lg shadow-teal-500/25 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full inline-flex items-center justify-center space-x-2 bg-forest hover:bg-forest-700 text-white font-medium text-sm py-2.5 px-4 rounded transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Evaluating Evidence & Comparing with Official Listing...</span>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Evaluating Evidence & Listing Consistency...</span>
               </>
             ) : (
               <>
-                <ShieldCheck className="w-6 h-6" />
-                <span>Run OfferProof Verification Engine</span>
+                <ShieldCheck className="w-4 h-4" />
+                <span>Run Verification Report</span>
               </>
             )}
           </button>
-          <p className="text-center text-[11px] text-navy-500 mt-2">
-            Deterministic serverless analysis. Never displays simulated results without actual processing.
+          <p className="text-center text-[11px] text-muted mt-2">
+            Deterministic serverless analysis. Files parsed in browser memory; zero document storage.
           </p>
         </div>
       </form>
