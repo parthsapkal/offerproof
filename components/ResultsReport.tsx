@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { VerificationReport, FindingSeverity } from '@/lib/types';
 import { FindingCard } from './FindingCard';
+import { OfficialListingMatchCard } from './OfficialListingMatchCard';
 import { LimitationsSection } from './LimitationsSection';
 import { ActionChecklist } from './ActionChecklist';
 import {
@@ -194,6 +195,11 @@ export function ResultsReport({ report, onReset }: ResultsReportProps) {
           })}
         </div>
       </div>
+
+      {/* Official Listing Match Section */}
+      {report.officialListingMatch && (
+        <OfficialListingMatchCard matchResult={report.officialListingMatch} />
+      )}
 
       {/* Individual Findings with Severity Filter */}
       <div className="space-y-4">

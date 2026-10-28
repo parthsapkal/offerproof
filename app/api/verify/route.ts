@@ -38,10 +38,17 @@ export async function POST(request: Request) {
       documentFileName: typeof body.documentFileName === 'string' ? body.documentFileName.trim() : undefined,
       documentFileType: typeof body.documentFileType === 'string' ? body.documentFileType.trim() : undefined,
       documentExtractedText: typeof body.documentExtractedText === 'string' ? body.documentExtractedText.trim() : undefined,
+      // Extended fields for Official Listing Match
+      jobId: typeof body.jobId === 'string' ? body.jobId.trim() : undefined,
+      location: typeof body.location === 'string' ? body.location.trim() : undefined,
+      compensation: typeof body.compensation === 'string' ? body.compensation.trim() : undefined,
+      duration: typeof body.duration === 'string' ? body.duration.trim() : undefined,
+      applicationDeadline: typeof body.applicationDeadline === 'string' ? body.applicationDeadline.trim() : undefined,
+      demoScenarioId: typeof body.demoScenarioId === 'string' ? body.demoScenarioId.trim() : undefined,
     };
 
-    // Execute deterministic verification engine
-    const report = runVerificationEngine(input);
+    // Execute deterministic verification engine (async with listing matcher)
+    const report = await runVerificationEngine(input);
 
     return NextResponse.json({
       success: true,

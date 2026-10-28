@@ -17,6 +17,11 @@ export const SAMPLE_CASES: SampleCase[] = [
       recruiterEmail: 'rohit.hr.apexcareers@gmail.com',
       jobTitle: 'Data Processing & Operations Intern',
       jobListingUrl: 'https://bit.ly/apex-intern-slot',
+      jobId: 'APX-DATA-2025',
+      location: 'Remote / Work From Home',
+      compensation: '\u20B935,000 / month',
+      duration: '3 Months',
+      applicationDeadline: 'Within 4 Hours',
       offerSource: 'telegram',
       feeRequested: true,
       feeAmount: 2500,
@@ -48,6 +53,12 @@ Note: If payment is not submitted within 4 hours, your offer letter will be canc
       recruiterEmail: 'priya.nair@razorpay.com',
       jobTitle: 'Software Engineering Intern (Frontend)',
       jobListingUrl: 'https://razorpay.com/careers/jobs/frontend-intern-2025',
+      jobId: 'RZP-ENG-2025-042',
+      location: 'Bangalore, Karnataka (Hybrid)',
+      compensation: '\u20B935,000 / month',
+      duration: '6 Months',
+      applicationDeadline: '15 November 2025',
+      demoScenarioId: 'matching_role',
       offerSource: 'campus',
       feeRequested: false,
       feeAmount: 0,
@@ -56,10 +67,11 @@ Note: If payment is not submitted within 4 hours, your offer letter will be canc
 
 Following your successful completion of the Razorpay Campus Coding Assessment, Technical Interview Round 1, and Engineering Managerial Discussion, we are delighted to offer you an internship as Software Engineering Intern (Frontend) at Razorpay Software Private Limited.
 
-Role: Software Engineering Intern
+Role: Software Engineering Intern (Frontend)
+Requisition ID: RZP-ENG-2025-042
 Duration: 6 Months (Full-Time Internship)
 Stipend: \u20B935,000 per month
-Location: Bangalore / Hybrid
+Location: Bangalore, Karnataka (Hybrid)
 
 Notice on Hiring Integrity: Razorpay does not charge any application, registration, processing, or equipment deposit fee from candidates at any point during or after the recruitment cycle. All official communication will come strictly from our verified @razorpay.com domain.`,
       documentFileName: 'Razorpay_Campus_Internship_Offer.pdf',
@@ -82,6 +94,10 @@ Notice on Hiring Integrity: Razorpay does not charge any application, registrati
       recruiterEmail: 'kunal.talent.swiggy@outlook.com',
       jobTitle: 'Product Operations & Growth Intern',
       jobListingUrl: '',
+      jobId: 'SWIG-OPS-331',
+      location: 'Bangalore, Karnataka',
+      compensation: '\u20B925,000 / month',
+      duration: '3 Months',
       offerSource: 'telegram',
       feeRequested: false,
       feeAmount: null,
@@ -90,8 +106,9 @@ Notice on Hiring Integrity: Razorpay does not charge any application, registrati
 
 I am Kunal Sharma from the Swiggy Talent Acquisition team. We reviewed your profile on LinkedIn and would like to invite you for a 3-month Product Operations & Growth Internship with our Bangalore operations team.
 
+Role: Product Operations & Growth Intern (SWIG-OPS-331)
 Stipend: \u20B925,000 per month.
-Role: Growth Operations
+Location: Bangalore, Karnataka
 
 Please reply with your updated resume, college ID card photo, and phone number so we can schedule the onboarding briefing. All further updates will be coordinated via this Telegram recruitment group.`,
       documentFileName: 'Swiggy_Role_Overview.png',

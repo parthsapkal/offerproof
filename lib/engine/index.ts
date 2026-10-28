@@ -11,11 +11,15 @@ import { checkOfferSourceRule } from './sourceRule';
 import { checkTextAnalysisRules } from './textAnalysisRule';
 import { checkEvidenceCompletenessRule } from './evidenceRule';
 import { extractApexDomain, extractEmailDomain, extractHostname } from './domainUtils';
+import { compareOfferWithOfficialListing } from './listingComparator';
 
 /**
  * Main Deterministic Verification Engine Orchestrator
  */
-export function runVerificationEngine(input: OfferInput): VerificationReport {
+export async function runVerificationEngine(input: OfferInput): Promise<VerificationReport> {
+  // Run official listing comparison
+  const officialListingMatch = await compareOfferWithOfficialListing(input);
+
   // Aggregate all rule findings
   const allFindings: Finding[] = [
     ...checkFeeRule(input),
@@ -24,6 +28,48 @@ export function runVerificationEngine(input: OfferInput): VerificationReport {
     ...checkTextAnalysisRules(input),
     ...checkEvidenceCompletenessRule(input),
   ];
+
+  // Integrate listing match findings
+  if (officialListingMatch.status === 'STRONG_MATCH') {
+    allFindings.push({
+      id: 'LISTING_STRONG_MATCH_VERIFIED',
+      category: 'LISTING_MATCH',
+      severity: 'VERIFIED',
+      title: 'Official Opportunity Listing Corroborated',
+      evidence: `Listing retrieved from verified source ("${officialListingMatch.sourceDomain}"). Key fields (${officialListingMatch.matchedCount}) match submitted offer terms.`,
+      explanation:
+        'The submitted role corresponds with an active public requisition on the company\'s official career portal or authorized ATS. Note: Recruiter authorization must still be confirmed independently.',
+      recommendedAction:
+        'Verify that your formal communication originated from an authenticated corporate email address, and check that your application appears in the company candidate portal.',
+    });
+  } else if (officialListingMatch.status === 'MISMATCH_DETECTED') {
+    const isFeeMismatch = officialListingMatch.fields.some(
+      (f) => f.fieldName === 'paymentRequest' && f.status === 'MISMATCH'
+    );
+    allFindings.push({
+      id: 'LISTING_CRITICAL_MISMATCH',
+      category: 'LISTING_MATCH',
+      severity: isFeeMismatch ? 'CRITICAL' : 'WARNING',
+      title: isFeeMismatch ? 'Payment Mandate Contradicts Official Listing' : 'Listing Terms Diverge from Official Requisition',
+      evidence: officialListingMatch.suspiciousDifferences[0] || 'Significant discrepancies detected against public opening.',
+      explanation:
+        'The submitted offer letter contradicts the official public posting on the company\'s authorized careers site. Scammers frequently clone real job titles while fabricating upfront fees or routing applicants to informal channels.',
+      recommendedAction:
+        'Do not sign or pay. Contact the company\'s official talent acquisition team directly through their main careers portal to report the discrepancy.',
+    });
+  } else if (officialListingMatch.status === 'USER_PROVIDED_UNVERIFIED') {
+    allFindings.push({
+      id: 'LISTING_DOMAIN_UNVERIFIED',
+      category: 'LISTING_MATCH',
+      severity: 'CAUTION',
+      title: 'Listing Source Domain Not Independently Verified',
+      evidence: `Listing URL points to "${officialListingMatch.sourceDomain || 'unverified host'}", which is not recognized as an authorized corporate portal.`,
+      explanation:
+        'The listing URL was provided by the user, but cannot be independently matched to the target company\'s authenticated domain or a recognized ATS platform. Fraudulent actors sometimes deploy cloned job boards.',
+      recommendedAction:
+        'Search for the opportunity directly on the company\'s primary corporate careers website rather than relying on third-party links.',
+    });
+  }
 
   // Count severities
   const criticalCount = allFindings.filter((f) => f.severity === 'CRITICAL').length;
@@ -92,6 +138,18 @@ export function runVerificationEngine(input: OfferInput): VerificationReport {
         : 'NEUTRAL',
     },
     {
+      label: 'Official Listing Match',
+      value: officialListingMatch.statusLabel,
+      status:
+        officialListingMatch.status === 'STRONG_MATCH'
+          ? 'VERIFIED'
+          : officialListingMatch.status === 'MISMATCH_DETECTED'
+          ? 'FLAGGED'
+          : officialListingMatch.status === 'USER_PROVIDED_UNVERIFIED'
+          ? 'MISSING'
+          : 'NEUTRAL',
+    },
+    {
       label: 'Communication Channel',
       value: input.offerSource ? input.offerSource.toUpperCase() : 'Unspecified',
       status:
@@ -131,6 +189,7 @@ export function runVerificationEngine(input: OfferInput): VerificationReport {
   const limitations: string[] = [
     'OfferProof uses deterministic heuristic rules based on documented Indian student internship scams and AICTE guidelines; it does not replace legal or police investigation.',
     'A "Lower Risk" finding does not certify that an offer is 100% authentic; sophisticated threat actors may occasionally clone genuine email headers.',
+    'A "Strong Match" on a job listing proves a real requisition exists, but DOES NOT prove the person contacting you is authorized to extend the offer.',
     'An "Inconclusive" finding means the available digital evidence was insufficient to confirm identity; it is not a declaration of guilt.',
     'OfferProof never executes uploaded files, never contacts the employer directly, and never stores private student offer letters.',
   ];
@@ -185,5 +244,6 @@ export function runVerificationEngine(input: OfferInput): VerificationReport {
     limitations,
     recommendedNextSteps,
     inputSnapshot: input,
+    officialListingMatch,
   };
 }

@@ -30,7 +30,28 @@ Every hiring season, thousands of Indian college students fall victim to predato
    - **No fabricated numeric fraud probabilities** (e.g. no fake "87.3% scam" numbers).
    - Distinguishes **observed facts**, **rule-based warnings**, and **details that have not been verified**.
 
-2. **6 Specialized Verification Rules**:
+2. **Official Listing Match System (`lib/engine/listingComparator.ts`)**:
+   - Compares submitted offer terms against the corresponding public listing on the company's official careers site or an authorized ATS (Greenhouse, Lever, Workday, Internshala, Unstop).
+   - **SSRF Protection (`urlValidator.ts`)**: Server-side URL fetching blocks private IP ranges (`10.x`, `172.16.x`, `192.168.x`, `127.0.0.1`), cloud metadata (`169.254.169.254`), non-standard ports, and internal hostnames.
+   - **Domain Source Validation (`sourceValidator.ts`)**: Distinguishes verified official corporate portals, authorized enterprise ATS platforms, unverified user-provided domains, and lookalike domains.
+   - **10-Field Discrepancy Matrix**:
+     1. Company Name
+     2. Job / Internship Title
+     3. Job / Requisition ID
+     4. Location & Work Arrangement (Remote / Hybrid / On-site)
+     5. Salary or Stipend
+     6. Employment / Internship Duration
+     7. Application Deadline
+     8. Recruiter Name & Contact Details
+     9. Application Channel & URL
+     10. Fees, Deposits & Monetary Requirements (Security Critical)
+   - **Three-Pillar Independent Verification Framework**:
+     1. *Does the company appear legitimate?*
+     2. *Does the submitted opportunity match an official or authorized listing?*
+     3. *Has the recruiter's authority and specific offer been independently confirmed?*
+     *(A matching listing does NOT automatically prove the recruiter is genuine; scammers routinely copy real job descriptions!).*
+
+3. **6 Specialized Verification Rules**:
    - **Fee Rule (`feeRule.ts`)**: Flags registration fees, processing charges, laptop deposits, and UPI/QR code payment requests under AICTE internship norms. Smartly distinguishes legitimate corporate anti-fee policy disclaimers.
    - **Domain & Email Rule (`domainRule.ts`)**: Compares recruiter email domain against claimed corporate website domain. Flags free public webmail (`@gmail.com`, `@outlook.com`), lookalike typo-squatting domains (`-careers`, `-india`), and verifies ATS portals (Greenhouse, Lever, Internshala).
    - **Communication Channel Rule (`sourceRule.ts`)**: Evaluates the risk profile of Telegram, WhatsApp, Instagram ads, cold emails, vs. official Campus Placement Cell (TPO) drives.

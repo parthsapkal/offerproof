@@ -24,6 +24,13 @@ export interface OfferInput {
   documentFileName?: string;
   documentFileType?: string;
   documentExtractedText?: string;
+  // Extended fields for Official Listing Match
+  jobId?: string;
+  location?: string;
+  compensation?: string;
+  duration?: string;
+  applicationDeadline?: string;
+  demoScenarioId?: string;
 }
 
 export type FindingSeverity = 'CRITICAL' | 'WARNING' | 'CAUTION' | 'VERIFIED';
@@ -33,7 +40,8 @@ export type FindingCategory =
   | 'DOMAIN_EMAIL'
   | 'COMMUNICATION_CHANNEL'
   | 'CONTENT_TACTICS'
-  | 'COMPLETENESS';
+  | 'COMPLETENESS'
+  | 'LISTING_MATCH';
 
 export interface Finding {
   id: string;
@@ -52,6 +60,67 @@ export interface ObservedFact {
   value: string;
   status: 'FLAGGED' | 'VERIFIED' | 'NEUTRAL' | 'MISSING';
   detail?: string;
+}
+
+export type ListingMatchStatus =
+  | 'STRONG_MATCH'
+  | 'PARTIAL_MATCH'
+  | 'MISMATCH_DETECTED'
+  | 'NO_MATCHING_LISTING'
+  | 'UNABLE_TO_VERIFY'
+  | 'USER_PROVIDED_UNVERIFIED';
+
+export type FieldMatchStatus = 'MATCH' | 'MISMATCH' | 'NOT_AVAILABLE';
+
+export interface FieldComparison {
+  fieldName: string;
+  fieldLabel: string;
+  submittedValue: string;
+  listingValue: string;
+  status: FieldMatchStatus;
+  explanation: string;
+  isSecurityCritical?: boolean;
+}
+
+export interface PillarVerificationDetail {
+  status: 'VERIFIED' | 'CAUTION' | 'SUSPICIOUS' | 'CONFIRMED' | 'UNCONFIRMED' | 'PARTIAL' | 'MISMATCH' | 'UNVERIFIED';
+  label: string;
+  summary: string;
+  evidence: string;
+  actionRequired: string;
+}
+
+export interface ThreePillarVerification {
+  companyLegitimacy: PillarVerificationDetail;
+  listingMatch: PillarVerificationDetail;
+  recruiterAuthorization: PillarVerificationDetail;
+  guidanceNote: string;
+}
+
+export interface OfficialListingMatchResult {
+  status: ListingMatchStatus;
+  statusLabel: string;
+  summary: string;
+  color: 'teal' | 'amber' | 'red' | 'blue' | 'gray';
+  listingUrl: string | null;
+  sourceDomain: string | null;
+  isIndependentlyVerifiedSource: boolean;
+  sourceType:
+    | 'OFFICIAL_CAREERS_PORTAL'
+    | 'AUTHORIZED_ATS'
+    | 'UNVERIFIED_THIRD_PARTY'
+    | 'SUSPICIOUS_LOOKALIKE'
+    | 'NONE';
+  checkedAt: string;
+  fields: FieldComparison[];
+  matchedCount: number;
+  mismatchedCount: number;
+  unavailableCount: number;
+  suspiciousDifferences: string[];
+  recommendedNextSteps: string[];
+  threePillarVerification: ThreePillarVerification;
+  isSimulatedDemo?: boolean;
+  simulatedScenarioTitle?: string;
 }
 
 export interface VerificationReport {
@@ -76,6 +145,7 @@ export interface VerificationReport {
   limitations: string[];
   recommendedNextSteps: string[];
   inputSnapshot: OfferInput;
+  officialListingMatch?: OfficialListingMatchResult;
 }
 
 export interface SampleCase {
@@ -86,5 +156,13 @@ export interface SampleCase {
   companyDisplay: string;
   shortDescription: string;
   keyHighlight: string;
+  input: OfferInput;
+}
+
+export interface DemoListingScenario {
+  id: string;
+  title: string;
+  shortDescription: string;
+  expectedStatus: ListingMatchStatus;
   input: OfferInput;
 }
